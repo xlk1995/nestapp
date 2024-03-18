@@ -7,10 +7,13 @@ import {
     Param,
     Patch,
     Post,
+    ValidationPipe,
 } from '@nestjs/common';
 
 import { isNil } from 'lodash';
 
+import { CreatePostDto } from '../dtos/create-post.dto';
+import { UpdatePostDto } from '../dtos/update-post.dto';
 import { PostEntity } from '../types';
 
 let posts: PostEntity[] = [
@@ -48,7 +51,18 @@ export class PostController {
     }
 
     @Post()
-    async store(@Body() data: PostEntity) {
+    async store(
+        @Body(
+            new ValidationPipe({
+                transform: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+                validationError: { target: false },
+                groups: ['create'],
+            }),
+        )
+        data: CreatePostDto,
+    ) {
         const newPost = {
             id: Math.max(...posts.map(({ id }) => id + 1)),
             ...data,
@@ -58,21 +72,28 @@ export class PostController {
     }
 
     @Patch()
-    async update(@Body() data: PostEntity) {
-        const toUpdate = posts.find(({ id }) => id === Number(data.id));
-        console.log(toUpdate, '====');
-
-        if (isNil(toUpdate))
-            throw new NotFoundException(`the post with id ${data.id} is not found`);
-        posts = posts.map((item) => (item.id === Number(toUpdate.id) ? data : item));
-        return data;
+    async update(
+        @Body(
+            new ValidationPipe({
+                transform: true,
+                forbidNonWhitelisted: true,
+                forbidUnknownValues: true,
+                validationError: { target: false },
+                groups: ['update'],
+            }),
+        )
+        { id, ...data }: UpdatePostDto,
+    ) {
+        let toUpdate = posts.find((item) => item.id === Number(id));
+        if (isNil(toUpdate)) throw new NotFoundException(`the post with id ${id} is not found`);
+        toUpdate = { ...toUpdate, ...data };
+        posts = posts.map((item) => (item.id === Number(id) ? toUpdate : item));
+        return toUpdate;
     }
 
     @Delete(':id')
     async delete(@Param('id') id: number) {
         const toDelete = posts.find(({ id: old }) => old === Number(id));
-        console.log(toDelete, '0000');
-
         if (isNil(toDelete)) throw new NotFoundException(`the post with id ${id} is not found`);
         posts = posts.filter((item) => item.id !== Number(id));
         return toDelete;
