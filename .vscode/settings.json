@@ -18,6 +18,8 @@
         "deepmerge",
         "dtos",
         "enco",
-        "fastify"
+        "fastify",
+        "Mata",
+        "typeorm"
     ],
 }
