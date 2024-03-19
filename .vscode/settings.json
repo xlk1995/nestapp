@@ -16,6 +16,7 @@
     "npm.packageManager": "pnpm",
     "cSpell.words": [
         "dtos",
+        "enco",
         "fastify"
     ],
 }
