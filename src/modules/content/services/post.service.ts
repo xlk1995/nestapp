@@ -7,6 +7,7 @@ import { paginate } from '@/modules/database/helper';
 import { PaginateOptions, QueryHook } from '@/modules/database/types';
 
 import { PostOrderType } from '../constants';
+import { CreatePostDto, UpdatePostDto } from '../dtos/post.dto';
 import { PostEntity } from '../entities/post.entity';
 import { PostRepository } from '../repositories/post.repository';
 
@@ -28,8 +29,12 @@ export class PostService {
      * add
      * @param data
      */
-    async create(data: Record<string, any>) {
-        const item = await this.repository.save(data);
+    async create(data: CreatePostDto) {
+        let publishedAt: Date | null;
+        if (!isNil(data.publish)) {
+            publishedAt = data.publish ? new Date() : null;
+        }
+        const item = await this.repository.save({ ...omit(data, ['publish']), publishedAt });
         return this.detail(item.id);
     }
 
@@ -37,8 +42,12 @@ export class PostService {
      * update
      * @param data
      */
-    async update(data: Record<string, any>) {
-        await this.repository.update(data.id, omit(data, ['id']));
+    async update(data: UpdatePostDto) {
+        let publishedAt: Date | null;
+        if (!isNil(data.publish)) {
+            publishedAt = data.publish ? new Date() : null;
+        }
+        await this.repository.update(data.id, { ...omit(data, ['id, publish']), publishedAt });
         return this.detail(data.id);
     }
 
@@ -76,6 +85,8 @@ export class PostService {
         callback?: QueryHook<PostEntity>,
     ) {
         const { orderBy, isPublished } = options;
+        console.log(orderBy, isPublished, '====');
+
         if (typeof isPublished === 'boolean') {
             isPublished
                 ? qb.where({

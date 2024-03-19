@@ -58,7 +58,7 @@ export class PostEntity extends BaseEntity {
         type: 'varchar',
         nullable: true,
     })
-    publishAt?: Date | null;
+    publishedAt?: Date | null;
 
     @Column({
         comment: '自定义文章排序',

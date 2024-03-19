@@ -19,7 +19,10 @@
         "dtos",
         "enco",
         "fastify",
+        "Intercepter",
         "Mata",
+        "nestjs",
+        "Streamable",
         "typeorm"
     ],
 }
