@@ -54,7 +54,7 @@ export class QueryDto implements PaginateOptions {
 export class CreatePostDto {
     @MaxLength(255, {
         always: true,
-        message: '文章最大长度为$container1',
+        message: '文章标题最大长度为$constraint1',
     })
     @IsNotEmpty({
         groups: ['create'],
@@ -65,9 +65,22 @@ export class CreatePostDto {
     })
     title: string;
 
+    @MaxLength(1000, {
+        always: true,
+        message: '文章内容最大长度为$constraint1',
+    })
+    @IsNotEmpty({
+        groups: ['create'],
+        message: '文章内容必须填写',
+    })
+    @IsOptional({
+        groups: ['update'],
+    })
+    body: string;
+
     @MaxLength(500, {
         always: true,
-        message: '文章描述最大长度为$container1',
+        message: '文章描述最大长度为$constraint1',
     })
     @IsOptional({ always: true })
     summary?: string;
@@ -81,7 +94,7 @@ export class CreatePostDto {
     @MaxLength(20, {
         each: true,
         always: true,
-        message: '每个关键字长度不能大于$container1',
+        message: '每个关键字长度不能大于$constraint1',
     })
     @IsOptional({ always: true })
     keywords?: string[];
