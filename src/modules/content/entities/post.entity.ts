@@ -4,11 +4,20 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
+    ManyToMany,
+    ManyToOne,
+    OneToMany,
     PrimaryColumn,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm';
 
 import { PostBodyType } from '../constants';
+
+import { CategoryEntity } from './category.entity';
+import { CommentEntity } from './comment.entity';
+import { TagEntity } from './tag.entity';
 
 // 表名字
 // 通过@Exclude首先把所有属性都排除，然后根据我们的需要来配置我们的组
@@ -90,4 +99,32 @@ export class PostEntity extends BaseEntity {
         comment: '更新时间',
     })
     updateAt: Date;
+
+    /**
+     * 通过queryBuilder生成的评论数量(虚拟字段)
+     */
+    @Expose()
+    commentCount: number;
+
+    @Expose()
+    @ManyToOne(() => CategoryEntity, (category) => category.posts, {
+        nullable: true,
+        onDelete: 'SET NULL',
+    })
+    category: Relation<CategoryEntity>;
+
+    // 多对多关联时，关联的一侧(比如这里的PostEntity的tags)必须加上@JoinTable装饰器
+    @Expose()
+    @Type(() => TagEntity)
+    @ManyToMany(() => TagEntity, (tag) => tag.posts, {
+        cascade: true,
+    })
+    @JoinTable()
+    tags: Relation<TagEntity>[];
+
+    @Expose()
+    @OneToMany(() => CommentEntity, (comment) => comment.posts, {
+        cascade: true,
+    })
+    comments: Relation<CommentEntity>[];
 }

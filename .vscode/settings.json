@@ -21,6 +21,7 @@
         "fastify",
         "Intercepter",
         "Mata",
+        "mpath",
         "nestjs",
         "Streamable",
         "typeorm"
