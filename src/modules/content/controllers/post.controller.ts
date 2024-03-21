@@ -9,17 +9,15 @@ import {
     Post,
     Query,
     SerializeOptions,
-    UseInterceptors,
     ValidationPipe,
 } from '@nestjs/common';
 
-import { AppIntercepter } from '@/modules/core/providers/app.interceptor';
 import { PaginateOptions } from '@/modules/database/types';
 
 import { CreatePostDto, UpdatePostDto } from '../dtos/post.dto';
 import { PostService } from '../services/post.service';
 
-@UseInterceptors(AppIntercepter)
+// @UseInterceptors(AppIntercepter)
 @Controller('posts')
 export class PostController {
     constructor(private postService: PostService) {}
