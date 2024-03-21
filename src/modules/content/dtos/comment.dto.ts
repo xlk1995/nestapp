@@ -14,11 +14,13 @@ import {
 } from 'class-validator';
 import { toNumber } from 'lodash';
 
+import { DtoValidation } from '@/modules/core/decorators/dto-validation.decorator';
 import { PaginateOptions } from '@/modules/database/types';
 
 /**
  * 评论分页查询验证
  */
+@DtoValidation({ groups: ['query'] })
 export class QueryCommentDto implements PaginateOptions {
     @IsUUID(undefined, { message: 'ID格式错误' })
     @IsOptional()
@@ -40,11 +42,13 @@ export class QueryCommentDto implements PaginateOptions {
 /**
  * 评论树查询
  */
+@DtoValidation({ groups: ['query'] })
 export class QueryCommentTreeDto extends PickType(QueryCommentDto, ['post']) {}
 
 /**
  * 评论添加验证
  */
+@DtoValidation({ groups: ['create'] })
 export class CreateCommentDto {
     @MaxLength(1000, { message: '评论内容不能超过$constraint1个字' })
     @IsNotEmpty({ message: '评论内容不能为空' })

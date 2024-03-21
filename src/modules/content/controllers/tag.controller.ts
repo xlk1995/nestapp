@@ -27,15 +27,7 @@ export class TagController {
     @Get()
     @SerializeOptions({})
     async list(
-        @Query(
-            new ValidationPipe({
-                transform: true,
-                whitelist: true,
-                forbidNonWhitelisted: true,
-                forbidUnknownValues: true,
-                validationError: { target: false },
-            }),
-        )
+        @Query()
         options: QueryCategoryDto,
     ) {
         return this.service.paginate(options);

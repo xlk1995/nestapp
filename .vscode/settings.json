@@ -22,9 +22,11 @@
         "fastify",
         "Intercepter",
         "Mata",
+        "metatype",
         "mpath",
         "nchildren",
         "nestjs",
+        "Paramtype",
         "Streamable",
         "typeorm"
     ],

@@ -27,15 +27,7 @@ export class PostController {
     @Get()
     @SerializeOptions({ groups: ['post-list'] })
     async list(
-        @Query(
-            new ValidationPipe({
-                transform: true,
-                whitelist: true,
-                forbidNonWhitelisted: true,
-                forbidUnknownValues: true,
-                validationError: { target: false },
-            }),
-        )
+        @Query()
         options: PaginateOptions,
     ) {
         return this.postService.paginate(options);

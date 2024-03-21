@@ -32,15 +32,7 @@ export class CategoryController {
     @Get()
     @SerializeOptions({ groups: ['category-list'] })
     async list(
-        @Query(
-            new ValidationPipe({
-                transform: true,
-                whitelist: true,
-                forbidNonWhitelisted: true,
-                forbidUnknownValues: true,
-                validationError: { target: false },
-            }),
-        )
+        @Query()
         options: QueryCategoryDto,
     ) {
         return this.service.paginate(options);
