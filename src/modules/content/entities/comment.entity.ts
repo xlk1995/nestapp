@@ -59,5 +59,5 @@ export class CommentEntity {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
-    posts: Relation<PostEntity>;
+    post: Relation<PostEntity>;
 }

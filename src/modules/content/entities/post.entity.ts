@@ -123,7 +123,7 @@ export class PostEntity extends BaseEntity {
     tags: Relation<TagEntity>[];
 
     @Expose()
-    @OneToMany(() => CommentEntity, (comment) => comment.posts, {
+    @OneToMany(() => CommentEntity, (comment) => comment.post, {
         cascade: true,
     })
     comments: Relation<CommentEntity>[];

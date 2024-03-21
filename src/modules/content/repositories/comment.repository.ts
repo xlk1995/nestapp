@@ -23,7 +23,7 @@ export class CommentRepository extends TreeRepository<CommentEntity> {
         return qb
             .leftJoinAndSelect(`comment.parent`, 'parent')
             .leftJoinAndSelect(`comment.post`, 'post')
-            .orderBy('comment.createdAt', 'DESC');
+            .orderBy('comment.createAt', 'DESC');
     }
 
     /**
