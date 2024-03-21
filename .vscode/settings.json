@@ -15,9 +15,17 @@
     // 默认使用pnpm作为包安装的管理工具
     "npm.packageManager": "pnpm",
     "cSpell.words": [
+        "COMMENTCOUNT",
         "deepmerge",
         "dtos",
         "enco",
-        "fastify"
+        "fastify",
+        "Intercepter",
+        "Mata",
+        "mpath",
+        "nchildren",
+        "nestjs",
+        "Streamable",
+        "typeorm"
     ],
 }
