@@ -23,7 +23,7 @@ import { PostOrderType } from '../constants';
 /**
  * 查询参数校验
  */
-export class QueryDto implements PaginateOptions {
+export class QueryPostDto implements PaginateOptions {
     @Transform(({ value }) => toBoolean(value))
     @IsBoolean()
     @IsOptional()
@@ -39,13 +39,21 @@ export class QueryDto implements PaginateOptions {
     @Min(1, { message: '当前页必须大于1' })
     @IsNumber()
     @IsOptional()
-    page = 1;
+    page? = 1;
 
     @Transform(({ value }) => toNumber(value))
     @Min(1, { message: '每页显示长度必须大于1' })
     @IsNumber()
     @IsOptional()
-    limit = 10;
+    limit? = 10;
+
+    @IsUUID(undefined, { message: 'ID格式错误' })
+    @IsOptional()
+    category?: string;
+
+    @IsUUID(undefined, { message: 'ID格式错误' })
+    @IsOptional()
+    tag?: string;
 }
 
 /**
@@ -107,6 +115,24 @@ export class CreatePostDto {
     @IsNumber(undefined, { always: true })
     @IsOptional({ always: true })
     customOrder?: number = 0;
+
+    @IsUUID(undefined, {
+        always: true,
+        message: 'ID格式错误',
+    })
+    @IsOptional({ always: true })
+    category?: string;
+
+    /**
+     * 根据标签ID查询
+     */
+    @IsUUID(undefined, {
+        always: true,
+        each: true,
+        message: 'ID格式错误',
+    })
+    @IsOptional({ always: true })
+    tags?: string[];
 }
 
 /**
