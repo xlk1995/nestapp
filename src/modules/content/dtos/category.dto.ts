@@ -13,7 +13,12 @@ import {
 import { toNumber } from 'lodash';
 
 import { DtoValidation } from '@/modules/core/decorators/dto-validation.decorator';
+import { IsDataExist } from '@/modules/database/constraints/data.exist.constraint';
+import { IsTreeUnique } from '@/modules/database/constraints/tree.unique.constraint';
+import { IsTreeUniqueExist } from '@/modules/database/constraints/tree.unique.exist.constraint';
 import { PaginateOptions } from '@/modules/database/types';
+
+import { CategoryEntity } from '../entities';
 
 // src/modules/content/dtos/category.dto.ts
 
@@ -37,6 +42,14 @@ export class QueryCategoryDto implements PaginateOptions {
  */
 @DtoValidation({ groups: ['create'] })
 export class CreateCategoryDto {
+    @IsTreeUnique(CategoryEntity, {
+        groups: ['create'],
+        message: '分类名称重复',
+    })
+    @IsTreeUniqueExist(CategoryEntity, {
+        groups: ['update'],
+        message: '名称重复',
+    })
     @MaxLength(25, {
         always: true,
         message: '分类名称长度不得超过$constraint1',
@@ -45,6 +58,7 @@ export class CreateCategoryDto {
     @IsOptional({ groups: ['update'] })
     name: string;
 
+    @IsDataExist(CategoryEntity, { always: true, message: '父分类不存在' })
     @IsUUID(undefined, { always: true, message: '父分类ID格式不正确' })
     @ValidateIf((value) => value.parent !== null && value.parent)
     @IsOptional({ always: true })

@@ -15,13 +15,19 @@ import {
 import { toNumber } from 'lodash';
 
 import { DtoValidation } from '@/modules/core/decorators/dto-validation.decorator';
+import { IsDataExist } from '@/modules/database/constraints/data.exist.constraint';
 import { PaginateOptions } from '@/modules/database/types';
+
+import { PostEntity } from '../entities';
 
 /**
  * 评论分页查询验证
  */
 @DtoValidation({ groups: ['query'] })
 export class QueryCommentDto implements PaginateOptions {
+    @IsDataExist(PostEntity, {
+        message: '文章不存在',
+    })
     @IsUUID(undefined, { message: 'ID格式错误' })
     @IsOptional()
     post?: string;

@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
+import { useContainer } from 'typeorm';
+
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -13,6 +15,9 @@ async function bootstrap() {
     });
     // 设置访问前缀
     app.setGlobalPrefix('api');
+    useContainer(app.select(AppModule), {
+        fallbackOnErrors: true,
+    });
     // 启动后输出
     await app.listen(3100, () => {
         console.log('api: http://localhost:3100');

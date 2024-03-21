@@ -17,9 +17,11 @@ import { isNil, toNumber } from 'lodash';
 
 import { DtoValidation } from '@/modules/core/decorators/dto-validation.decorator';
 import { toBoolean } from '@/modules/core/helpers';
+import { IsDataExist } from '@/modules/database/constraints/data.exist.constraint';
 import { PaginateOptions } from '@/modules/database/types';
 
 import { PostOrderType } from '../constants';
+import { CategoryEntity } from '../entities';
 
 /**
  * 查询参数校验
@@ -49,6 +51,10 @@ export class QueryPostDto implements PaginateOptions {
     @IsOptional()
     limit? = 10;
 
+    @IsDataExist(CategoryEntity, {
+        always: true,
+        message: '分类不存在',
+    })
     @IsUUID(undefined, { message: 'ID格式错误' })
     @IsOptional()
     category?: string;
@@ -119,6 +125,10 @@ export class CreatePostDto {
     @IsOptional({ always: true })
     customOrder?: number = 0;
 
+    @IsDataExist(CategoryEntity, {
+        always: true,
+        message: '分类不存在',
+    })
     @IsUUID(undefined, {
         always: true,
         message: 'ID格式错误',
