@@ -1,12 +1,18 @@
-import { resolve } from 'path';
-
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export const database = (): TypeOrmModuleOptions => ({
-    type: 'better-sqlite3',
-    database: resolve(__dirname, '../../back/database7.db'),
-    // 因为我们目前没有涉及到数据迁移的命令编写，所以必须在启动数据库时自动根据加载的模型(Entity)来同步数据表到数据库
+    // 以下为mysql配置
+    charset: 'utf8mb4',
+    logging: ['error'],
+    type: 'mysql',
+    host: '127.0.0.1',
+    port: 3306,
+    username: 'root',
+    password: 'xiao123456789',
+    database: '3rapp',
+    // 以下为sqlite配置
+    // type: 'better-sqlite3',
+    // database: resolve(__dirname, '../../database.db'),
     synchronize: true,
-    // 这样我们就不需要把每个模块的Entity逐个定死地添加到配置中的entities数组中了，因为你可以在每个模块中使用TypeOrmModule.forFeature来动态的加入Entity
     autoLoadEntities: true,
 });
