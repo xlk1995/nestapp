@@ -27,7 +27,9 @@
         "nchildren",
         "nestjs",
         "Paramtype",
+        "qbuilder",
         "Streamable",
+        "trasheds",
         "typeorm"
     ],
 }

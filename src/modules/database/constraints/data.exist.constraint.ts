@@ -45,7 +45,7 @@ export class DataExistConstraint implements ValidatorConstraintInterface {
         if (!args.constraints[0]) {
             return 'Model not been specified!';
         }
-        return `All instance of ${args.constraints[0].name} must been exists in databse!`;
+        return `All instance of ${args.constraints[0].name} must been exists in database!`;
     }
 }
 

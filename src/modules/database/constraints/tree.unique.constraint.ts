@@ -18,8 +18,8 @@ type Condition = {
 /**
  * 验证树形模型下同父节点同级别某个字段的唯一性
  */
-@Injectable()
 @ValidatorConstraint({ name: 'treeDataUnique', async: true })
+@Injectable()
 export class UniqueTreeConstraint implements ValidatorConstraintInterface {
     constructor(private dataSource: DataSource) {}
 
@@ -40,6 +40,8 @@ export class UniqueTreeConstraint implements ValidatorConstraintInterface {
 
         try {
             // 获取repository
+            console.log(this.dataSource, '=====');
+
             const repo = this.dataSource.getTreeRepository(condition.entity);
 
             if (isNil(value)) return true;

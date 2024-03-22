@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
-import { useContainer } from 'typeorm';
+import { useContainer } from 'class-validator';
 
 import { AppModule } from './app.module';
 
@@ -18,6 +18,7 @@ async function bootstrap() {
     useContainer(app.select(AppModule), {
         fallbackOnErrors: true,
     });
+
     // 启动后输出
     await app.listen(3100, () => {
         console.log('api: http://localhost:3100');

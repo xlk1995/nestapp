@@ -44,7 +44,7 @@ export class QueryCategoryDto implements PaginateOptions {
 export class CreateCategoryDto {
     @IsTreeUnique(CategoryEntity, {
         groups: ['create'],
-        message: '分类名称重复',
+        message: '分类名称重复1',
     })
     @IsTreeUniqueExist(CategoryEntity, {
         groups: ['update'],

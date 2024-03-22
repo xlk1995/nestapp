@@ -18,7 +18,7 @@ import { DtoValidation } from '@/modules/core/decorators/dto-validation.decorato
 import { IsDataExist } from '@/modules/database/constraints/data.exist.constraint';
 import { PaginateOptions } from '@/modules/database/types';
 
-import { PostEntity } from '../entities';
+import { CommentEntity, PostEntity } from '../entities';
 
 /**
  * 评论分页查询验证
@@ -64,6 +64,12 @@ export class CreateCommentDto {
     @IsDefined({ message: 'ID必须指定' })
     post: string;
 
+    /**
+     * 上级评论ID
+     */
+    @IsDataExist(CommentEntity, {
+        message: '父评论不存在',
+    })
     @IsUUID(undefined, { always: true, message: 'ID格式错误' })
     @ValidateIf((value) => value.parent !== null && value.parent)
     @IsOptional({ always: true })

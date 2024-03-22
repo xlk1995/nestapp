@@ -12,6 +12,8 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
+import { DeleteDto } from '@/modules/restful/dtos/delete.dto';
+
 import { QueryCategoryDto } from '../dtos/category.dto';
 import { CreateTagDto, UpdateTagDto } from '../dtos/tag.dto';
 import { TagService } from '../services';
@@ -75,9 +77,11 @@ export class TagController {
         return this.service.update(data);
     }
 
-    @Delete(':id')
-    @SerializeOptions({})
-    async delete(@Param('id', new ParseUUIDPipe()) id: string) {
-        return this.service.delete(id);
+    @Delete()
+    @SerializeOptions({ groups: ['post-list'] })
+    async delete(@Body() data: DeleteDto) {
+        const { ids } = data;
+
+        return this.service.delete(ids);
     }
 }

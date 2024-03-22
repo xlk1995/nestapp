@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import { omit } from 'lodash';
 
+import { In } from 'typeorm';
+
 import { paginate } from '@/modules/database/helper';
 
 import { CreateTagDto, QueryTagDto, UpdateTagDto } from '../dtos/tag.dto';
@@ -59,8 +61,8 @@ export class TagService {
      * 删除标签
      * @param id
      */
-    async delete(id: string) {
-        const item = await this.repository.findOneByOrFail({ id });
-        return this.repository.remove(item);
+    async delete(ids: string[]) {
+        const items = await this.repository.find({ where: { id: In(ids) } });
+        return this.repository.remove(items);
     }
 }

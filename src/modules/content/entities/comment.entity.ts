@@ -1,61 +1,57 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import {
+    BaseEntity,
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     ManyToOne,
     PrimaryColumn,
-    Relation,
     Tree,
     TreeChildren,
     TreeParent,
 } from 'typeorm';
 
+import type { Relation } from 'typeorm';
+
 import { PostEntity } from './post.entity';
 
 @Exclude()
 @Tree('materialized-path')
-@Entity('content_comment')
-export class CommentEntity {
-    @Exclude()
-    @PrimaryColumn({
-        type: 'varchar',
-        generated: 'uuid',
-        length: 36,
-    })
+@Entity('content_comments')
+export class CommentEntity extends BaseEntity {
+    @Expose()
+    @PrimaryColumn({ type: 'varchar', generated: 'uuid', length: 36 })
     id: string;
 
-    @Exclude()
-    @Column({
-        comment: '评论内容',
-        type: 'text',
-    })
+    @Expose()
+    @Column({ comment: '评论内容', type: 'text' })
+    @Index({ fulltext: true })
     body: string;
 
-    @Exclude()
+    @Expose()
     @Type(() => Date)
-    @CreateDateColumn()
-    createAt: Date;
+    @CreateDateColumn({
+        comment: '创建时间',
+    })
+    createdAt: Date;
 
     @Expose({ groups: ['comment-list'] })
     depth = 0;
 
-    // 删除父评论时，我们把这条评论的子孙评论一并删除，所以把oneDelete设置成CASCADE
-    @Expose({ groups: ['comment-list', 'comment-detail'] })
-    @TreeParent({
-        onDelete: 'CASCADE',
-    })
+    @Expose({ groups: ['comment-detail', 'comment-list'] })
+    @TreeParent({ onDelete: 'CASCADE' })
     parent: Relation<CommentEntity> | null;
 
     @Expose({ groups: ['comment-tree'] })
     @Type(() => CommentEntity)
-    @TreeChildren({
-        cascade: true,
-    })
+    @TreeChildren({ cascade: true })
     children: Relation<CommentEntity>[];
 
     @ManyToOne(() => PostEntity, (post) => post.comments, {
+        // 文章不能为空
         nullable: false,
+        // 跟随父表删除与更新
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })

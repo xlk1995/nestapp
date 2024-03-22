@@ -3,6 +3,7 @@ import {
     BaseEntity,
     Column,
     CreateDateColumn,
+    DeleteDateColumn,
     Entity,
     JoinTable,
     ManyToMany,
@@ -10,7 +11,6 @@ import {
     OneToMany,
     PrimaryColumn,
     Relation,
-    UpdateDateColumn,
 } from 'typeorm';
 
 import { PostBodyType } from '../constants';
@@ -91,20 +91,33 @@ export class PostEntity extends BaseEntity {
     @CreateDateColumn({
         comment: '创建时间',
     })
-    createAt: Date;
+    createdAt: Date;
 
     @Expose()
     @Type(() => Date)
-    @UpdateDateColumn({
-        comment: '更新时间',
+    @DeleteDateColumn({
+        comment: '删除时间',
     })
-    updateAt: Date;
+    deletedAt: Date;
 
     /**
      * 通过queryBuilder生成的评论数量(虚拟字段)
      */
     @Expose()
     commentCount: number;
+
+    /**
+     * 软删除标志deletedAt为null时则数据处于正常状态，
+     * 当deletedAt为一个时间时，则处于软删除状态（即处于回收站中），
+     * 该字段由TypeORM自身通过@DeleteDateColumn装饰器进行维护，
+     * 当使用Repository自带的soft Remove或者restore方法进行软删除或恢复数据时，它自己就会改变值，不需要手动设置
+     */
+    @Expose()
+    @Type(() => Date)
+    @DeleteDateColumn({
+        comment: '删除时间',
+    })
+    deleteAt: Date;
 
     @Expose()
     @ManyToOne(() => CategoryEntity, (category) => category.posts, {
